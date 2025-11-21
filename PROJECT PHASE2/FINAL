@@ -1,0 +1,283 @@
+
+/*Group C.....
+ *  Rayan Magdi Alharbi:446102752
+ *  faisal Mohammed Albashir: 446103399
+ *  Abdulelah Abdulaziz Albader: 446102942
+*/
+package libary;
+
+public class Member {
+   
+        // Instance attributes 
+        private int ID;  
+        private String Name;  
+        private int BorrowedCount;        
+        private int NumViewBorrowed;     
+        private int NumBorrows;           
+        private int NumReturns;           
+        private double SessionFees;     
+      
+        // Statistics   
+        public static double TotalRevenue = 0.0;  
+        public static int TotalViewBorrowed = 0;  
+        public static int TotalBorrows = 0;  
+        public static int TotalReturns = 0;  
+      
+        // Constructor  
+        public Member(int ID, String Name, int BorrowedCount) {  
+            this.ID = ID;  
+            this.Name = Name;  
+            this.BorrowedCount = BorrowedCount;  
+          
+        }  
+      
+        // To verify the borrow condition  
+        private boolean canBorrow() {  
+            return BorrowedCount < 5;    
+        }  
+      
+        private boolean canReturn() {  
+            return BorrowedCount > 0;  
+        }  
+      
+        //  current borrowed count  
+        public void viewBorrowedCount() {  
+            NumViewBorrowed++;  
+            TotalViewBorrowed++;  
+            System.out.println("Books currently borrowed: " + BorrowedCount);  
+        }  
+      
+        // Borrow 
+        public boolean borrowOne() {  
+            if (!canBorrow()) {  
+                System.out.println("You cannot borrow more than 5 books.");  
+                return false;  
+            }  
+            BorrowedCount++;  
+            NumBorrows++;  
+            TotalBorrows++;  
+            SessionFees += 0.50;  
+            TotalRevenue += 0.50;  
+            System.out.printf("Book borrowed successfully: Fees %.2f\n", 0.50);  
+            return true;  
+        }  
+      
+        // Return  
+        public boolean returnOne() {  
+            if (!canReturn()) {  
+                System.out.println("You have no books to return.");  
+                return false;  
+            }  
+            BorrowedCount--;  
+            NumReturns++;  
+            TotalReturns++;  
+            System.out.println("Book returned successfully.");  
+            return true;  
+        }  
+      
+        // Display session statistics for  member  
+        public void displayStatistics() {  
+            System.out.println("   Session Summary for " + Name + " (ID: " + ID + ")");  
+            System.out.println("Books Borrowed (this session): " + NumBorrows);  
+            System.out.println("Books Returned (this session): " + NumReturns);  
+            System.out.println("Times View Borrowed Count used (this session): " + NumViewBorrowed);  
+            System.out.printf("Fees Incurred (this session): %.2f\n", SessionFees);  
+        }  
+      
+        // Reset session statistics 
+        public void reset() {  
+            this.NumViewBorrowed = 0;  
+            this.NumBorrows = 0;  
+            this.NumReturns = 0;  
+            this.SessionFees = 0.0;  
+        }  
+      
+        // Getters & Setters 
+        public int getID() {  
+            return ID;  
+        }  
+      
+        public String getName() {  
+            return Name;  
+        }  
+      
+        public int getBorrowedCount() {  
+            return BorrowedCount;  
+        }  
+      
+        public double getSessionFees() {  
+            return SessionFees;  
+        }  
+      
+       
+        }  
+     
+
+
+package libary;
+import java.util.Scanner;
+public class LibarySimulation {
+
+	public static void main(String[] args) {
+		   Scanner scanner = new Scanner(System.in);  
+		   
+	        // users  
+	        Member member1 = new Member(446102752, "RAYAN", 0);  
+	        Member member2 = new Member(446103399, "FAISAL", 0);  
+	        Member member3 = new Member(446102942, "Abdulelah", 0);  
+	  
+	        boolean running = true;  
+	  //Main menu 
+	        while (running) {  
+	            System.out.println("    Welcome to the Library Simulation \n");  
+	            System.out.println("Select Your user\n");  
+	            System.out.println("1. Sign in as " + member1.getName() + " (ID: " + member1.getID() + ")");  
+	            System.out.println("2. Sign in as " + member2.getName() + " (ID: " + member2.getID() + ")");  
+	            System.out.println("3. Sign in as " + member3.getName() + " (ID: " + member3.getID() + ")");  
+	            System.out.println("4. Sign in as Administrator");  
+	            System.out.println("5. Exit Program\n");  
+	            System.out.print("Enter your choice: ");  
+	  
+	            int user_option = scanner.nextInt();  
+	            scanner.nextLine();   
+	         // member login
+	            if (user_option >= 1 && user_option <= 3) {  
+	                Member current;  
+	                // Determine which member is selected
+	                if (user_option == 1)   
+	                    current = member1;  
+	                else if (user_option == 2)   
+	                    current = member2;  
+	                else   
+	                    current = member3;  
+	  
+	               
+	  
+	                boolean sessionActive = true;  
+	                // Member menu 
+     
+	                while (sessionActive) {  
+	                    System.out.println("Welcome " + current.getName());  
+	                    System.out.println("1. View Borrowed Books Count");  
+	                    System.out.println("2. Borrow Book");  
+	                    System.out.println("3. Return Book");  
+	                    System.out.println("4. View Session Summary");  
+	                    System.out.println("5. Exit to Main Menu");  
+	                    System.out.print("Choose an option: ");  
+	  
+	                    user_option = scanner.nextInt();  
+	                    scanner.nextLine();  
+	                    // options to do for each member 
+
+	                    switch (user_option) {  
+	                        case 1:  
+	                            // Display current borrowed book count
+
+	                            current.viewBorrowedCount();  
+	                            break;  
+	                        case 2:  
+	                        	//Borrow one book
+	                            current.borrowOne();  
+	                            break;  
+	                        case 3:  
+	                        	//return one book
+	                            current.returnOne();  
+	                            break;  
+	                        case 4:  
+	                            // Show current session statistics
+
+	                            current.displayStatistics();  
+	                            break;  
+	                        case 5:  
+	                        	//exit to the main menu
+
+	                            System.out.println("Session Ended The currently Borrowed Books  " + 							current.getBorrowedCount());  
+	                            sessionActive = false;  
+	                            break;  
+	                        default:  
+
+	                            System.out.println("Invalid option Try again");  
+	                            break;  
+	                    }  
+	                }  
+	  
+	                //admin login
+
+	            } else if (user_option == 4) {  
+	                System.out.print("Enter admin password: ");  
+	                String password = scanner.nextLine(); 
+ 
+	  //check the admin password
+
+	                if (!password.equals("ccis")) {  
+	                    System.out.println("Invalid password. Access denied.");  
+	                } else {  
+	                    boolean adminActive = true;  
+	                 //admin menu
+
+	                    while (adminActive) {  
+	                        System.out.println("  Administrator Menu \n");  
+	                        System.out.println("1. View Total Revenue");  
+	                        System.out.println("2. Most Frequent Operation");  
+	                        System.out.println("3. Exit to Main Menu");  
+	                        System.out.print("Choose an option: ");  
+	  
+	                        int adminChoice = scanner.nextInt();  
+	                        scanner.nextLine();  
+	  
+	                        switch (adminChoice) {  
+	                            case 1:  
+	                                // show total revenue collected from the members
+
+	                                System.out.printf("Total Revenue: %.2f\n", Member.TotalRevenue);  
+	                                break;  
+	                            case 2:  
+	                                // Show the most performed operation either borrowed or returned
+
+	                                System.out.println("Most Frequent Operation:");  
+	                                if (Member.TotalBorrows == 0 && Member.TotalReturns == 0) {  
+	                                    System.out.println("- No operations performed yet.");  
+	                                } else if (Member.TotalBorrows > Member.TotalReturns) {  
+	                                    System.out.println(" Borrows");  
+	                                } else if (Member.TotalReturns > Member.TotalBorrows) {  
+	                                    System.out.println(" Returns");  
+	                                } else {  
+	                                    System.out.println(" Borrows and Returns ");  
+	                                }  
+	                                break;  
+	                            case 3:  
+
+	                            	//exit the admin menu
+
+	                                adminActive = false;  
+	                                break;  
+	                            default:  
+	                                System.out.println("Invalid option. Try again.");  
+	                                break;  
+	                        }  
+	                    }  
+	                }  
+	  
+	                //exit the program
+
+	            } else if (user_option == 5) {  
+	                System.out.println("See You Soon \u263A"); 
+	                
+	                running = false;    
+	            } 
+
+                // User entered an invalid menu option
+
+	            else {  
+	                System.out.println("Invalid option. Try again.");  
+	            }  
+	        }  
+	  
+	        scanner.close();  
+	    }  
+	 
+
+	}
+
+
+
